@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>AWS Certified Cloud Practitioner (CLF-C02) 学習ガイド</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#F3F5F9;
+    --surface:#FFFFFF;
+    --ink:#16202B;
+    --ink-soft:#57626F;
+    --navy:#152234;
+    --navy-soft:#24374F;
+    --orange:#FF9900;
+    --d1:#E8890C; /* クラウドコンセプト */
+    --d2:#0FA3A3; /* セキュリティ・コンプライアンス */
+    --d3:#6A5AE0; /* クラウド技術・サービス */
+    --d4:#2E9E5B; /* 請求・料金・サポート */
+    --line:#E3E7EE;
+    --radius:14px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    margin:0;
+    background:var(--bg);
+    color:var(--ink);
+    font-family:'Inter',-apple-system,'Hiragino Kaku Gothic ProN','Yu Gothic',sans-serif;
+    line-height:1.75;
+  }
+  .wrap{max-width:900px;margin:0 auto;padding:0 20px 80px;}
+  h1,h2,h3,h4{font-family:'Space Grotesk','Inter',sans-serif;letter-spacing:-0.01em;color:var(--ink);}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- HERO ---------- */
+  .hero{
+    background:linear-gradient(160deg,var(--navy) 0%, var(--navy-soft) 100%);
+    color:#EAF0F7;
+    padding:56px 20px 40px;
+    border-radius:0 0 28px 28px;
+    margin-bottom:28px;
+  }
+  .hero-inner{max-width:900px;margin:0 auto;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:12.5px;letter-spacing:0.14em;text-transform:uppercase;
+    color:var(--orange);margin:0 0 12px;font-weight:600;
+  }
+  .hero h1{font-size:clamp(26px,4vw,38px);margin:0 0 10px;color:#fff;line-height:1.3;}
+  .hero p.lead{color:#C6D2E0;max-width:640px;margin:0 0 28px;font-size:15.5px;}
+
+  /* 配点バー(シグネチャー要素) */
+  .weightbar{display:flex;width:100%;height:46px;border-radius:10px;overflow:hidden;box-shadow:0 0 0 1px rgba(255,255,255,0.08);}
+  .weightbar a{
+    display:flex;align-items:center;justify-content:center;
+    color:#0D1420;font-family:'IBM Plex Mono',monospace;font-weight:600;font-size:13px;
+    text-decoration:none;transition:filter .15s ease;white-space:nowrap;
+  }
+  .weightbar a:hover{filter:brightness(1.08);}
+  .wb-d1{background:var(--d1);width:24%;}
+  .wb-d2{background:var(--d2);width:30%;color:#04211F;}
+  .wb-d3{background:var(--d3);width:34%;color:#fff;}
+  .wb-d4{background:var(--d4);width:12%;color:#fff;}
+  .weightbar-caption{display:flex;justify-content:space-between;margin-top:8px;font-size:11.5px;color:#93A3B8;font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- 汎用カード ---------- */
+  .card{background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:22px 24px;margin:18px 0;}
+  .note{
+    background:#FFF7E8;border-left:3px solid var(--orange);
+    padding:14px 18px;border-radius:0 10px 10px 0;font-size:14.5px;margin:18px 0;color:#5A4419;
+  }
+
+  /* ---------- ドメインセクション ---------- */
+  .domain{margin-top:64px;scroll-margin-top:24px;}
+  .domain-head{display:flex;align-items:center;gap:14px;margin-bottom:6px;}
+  .domain-badge{
+    font-family:'IBM Plex Mono',monospace;font-size:12px;font-weight:600;
+    color:#fff;padding:5px 12px;border-radius:100px;white-space:nowrap;
+  }
+  .domain-title{font-size:24px;margin:0;}
+  .domain-sub{color:var(--ink-soft);font-size:14px;margin:4px 0 0;}
+  .d1 .domain-badge{background:var(--d1);} .d1 .accent{color:var(--d1);} .d1 .bar{background:var(--d1);}
+  .d2 .domain-badge{background:var(--d2);} .d2 .accent{color:var(--d2);} .d2 .bar{background:var(--d2);}
+  .d3 .domain-badge{background:var(--d3);} .d3 .accent{color:var(--d3);} .d3 .bar{background:var(--d3);}
+  .d4 .domain-badge{background:var(--d4);} .d4 .accent{color:var(--d4);} .d4 .bar{background:var(--d4);}
+  .domain-divider{height:4px;border-radius:4px;width:56px;margin:14px 0 26px;}
+
+  h3.sub{font-size:17.5px;margin:34px 0 6px;display:flex;align-items:center;gap:8px;}
+  h3.sub .tag{font-family:'IBM Plex Mono',monospace;font-size:11px;color:#fff;background:var(--ink-soft);padding:2px 8px;border-radius:6px;}
+
+  /* ---------- 図解ラッパ ---------- */
+  figure{margin:18px 0;padding:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);}
+  figure svg{display:block;width:100%;height:auto;}
+  figcaption{font-size:12.5px;color:var(--ink-soft);margin-top:10px;text-align:center;font-family:'IBM Plex Mono',monospace;}
+
+  /* ---------- 比較表 ---------- */
+  table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px;}
+  th,td{padding:10px 12px;border:1px solid var(--line);text-align:left;vertical-align:top;}
+  th{background:#F7F8FB;font-family:'Space Grotesk',sans-serif;font-weight:600;font-size:13px;}
+  tr:nth-child(even) td{background:#FAFBFD;}
+
+  /* ---------- ひっかけポイント ---------- */
+  .trap{background:#FCEEEE;border:1px solid #F3C9C9;border-radius:10px;padding:14px 18px;margin:14px 0;font-size:14px;}
+  .trap b{color:#B23A3A;}
+
+  /* ---------- 語呂/コツ ---------- */
+  .tip{background:#EFF7EE;border:1px solid #CFE7CC;border-radius:10px;padding:14px 18px;margin:14px 0;font-size:14px;}
+  .tip b{color:#2E7D42;}
+
+  /* ---------- クイズ ---------- */
+  .quiz{background:var(--surface);border:1px solid var(--line);border-radius:12px;margin:12px 0;overflow:hidden;}
+  .quiz summary{
+    cursor:pointer;padding:14px 18px;font-size:14.5px;font-weight:500;list-style:none;
+    display:flex;gap:10px;align-items:flex-start;
+  }
+  .quiz summary::-webkit-details-marker{display:none;}
+  .quiz summary .qnum{font-family:'IBM Plex Mono',monospace;font-size:12px;color:#fff;background:var(--ink-soft);border-radius:6px;padding:2px 7px;flex-shrink:0;margin-top:2px;}
+  .quiz .ans{padding:0 18px 16px 52px;font-size:14px;color:var(--ink-soft);border-top:1px dashed var(--line);}
+  .quiz .ans .correct{color:#2E7D42;font-weight:600;}
+
+  /* ---------- 目次 ---------- */
+  .toc{display:flex;flex-wrap:wrap;gap:10px;margin:20px 0;}
+  .toc a{
+    font-family:'IBM Plex Mono',monospace;font-size:12.5px;color:var(--ink);
+    background:var(--surface);border:1px solid var(--line);padding:8px 14px;border-radius:100px;text-decoration:none;
+  }
+
+  footer{margin-top:70px;text-align:center;color:var(--ink-soft);font-size:12.5px;}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">AWS Certified Cloud Practitioner &middot; CLF-C02</p>
+    <h1>ゼロからはじめる AWS CLF 学習ガイド</h1>
+    <p class="lead">イラストと図解で「なぜそうなるか」から理解する、非エンジニアでも読み進められるクラウド入門テキストです。4つのドメインは配点が均等ではないため、下のバーの幅がそのまま「学習に割く時間の目安」になります。</p>
+    <div class="weightbar">
+      <a href="#d1" class="wb-d1">① 24%</a>
+      <a href="#d2" class="wb-d2">② 30%</a>
+      <a href="#d3" class="wb-d3">③ 34%</a>
+      <a href="#d4" class="wb-d4">④ 12%</a>
+    </div>
+    <div class="weightbar-caption">
+      <span>クラウドコンセプト</span><span>セキュリティ・コンプライアンス</span><span>クラウド技術・サービス</span><span>請求・料金・サポート</span>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="card">
+    <h3 style="margin-top:0;">この教材の使い方</h3>
+    <p>各ドメインは <b>①概要 → ②図解つき解説 → ③比較表 → ④ひっかけポイント → ⑤覚え方 → ⑥確認問題(5問)</b> の順で構成されています。配点が最も高い③クラウド技術・サービス(34%)と②セキュリティ・コンプライアンス(30%)を合わせると全体の64%を占めるため、この2つのドメインに学習時間の半分以上を割くのが効率的です。</p>
+    <div class="toc">
+      <a href="#d1">① クラウドコンセプト</a>
+      <a href="#d2">② セキュリティ・コンプライアンス</a>
+      <a href="#d3">③ クラウド技術・サービス</a>
+      <a href="#d4">④ 請求・料金・サポート</a>
+      <a href="#summary">全体まとめ図</a>
+      <a href="#checklist">直前チェックリスト</a>
+    </div>
+  </div>
+
+  <!-- ============ DOMAIN 1 ============ -->
+  <section class="domain d1" id="d1">
+    <div class="domain-head">
+      <span class="domain-badge">配点 24%</span>
+    </div>
+    <h2 class="domain-title">① クラウドコンセプト</h2>
+    <p class="domain-sub">クラウドの価値提案 / クラウド経済性 / クラウド設計の基本原則</p>
+    <div class="domain-divider bar"></div>
+
+    <p>このドメインは「そもそもクラウドはなぜお得で、なぜ速いのか」という<b>考え方</b>を問うパートです。サービス名の暗記より、<span class="accent"><b>従来のIT(オンプレミス)と何が違うのか</b></span>を自分の言葉で説明できることが重要です。</p>
+
+    <h3 class="sub"><span class="tag">1-1</span> クラウドの6つの価値提案</h3>
+    <p>AWSは自社サーバーを持つ代わりに、クラウドを使う理由として次の6つの利点を掲げています。試験ではこの6つの「言い換え表現」が選択肢に紛れ込むので、意味とセットで覚えましょう。</p>
+
+    <figure>
+      <svg viewBox="0 0 740 300" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <symbol id="ic-swap" viewBox="0 0 24 24"><path d="M4 7h13l-3.5-3.5M20 17H7l3.5 3.5" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+          <symbol id="ic-scale" viewBox="0 0 24 24"><rect x="3" y="14" width="4" height="7" fill="#fff"/><rect x="10" y="9" width="4" height="12" fill="#fff"/><rect x="17" y="4" width="4" height="17" fill="#fff" opacity="0.55"/></symbol>
+          <symbol id="ic-gauge" viewBox="0 0 24 24"><path d="M4 18a8 8 0 1116 0" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M12 18l4.2-6.2" stroke="#fff" stroke-width="2.2" stroke-linecap="round"/><circle cx="12" cy="18" r="1.6" fill="#fff"/></symbol>
+          <symbol id="ic-bolt" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z" fill="#fff"/></symbol>
+          <symbol id="ic-nodc" viewBox="0 0 24 24"><path d="M4 21V8l8-4 8 4v13" stroke="#fff" stroke-width="2.1" fill="none" stroke-linejoin="round"/><path d="M3 21h18M8 21v-6h3v6M13 21v-9h3v9" stroke="#fff" stroke-width="2.1" fill="none"/><path d="M2 12 22 2" stroke="#fff" stroke-width="2.1" stroke-linecap="round"/></symbol>
+          <symbol id="ic-globe" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="#fff" stroke-width="2.1" fill="none"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18" stroke="#fff" stroke-width="2.1" fill="none"/></symbol>
+        </defs>
+
+        <!-- card generator: 3 cols x 2 rows -->
+        <g font-family="Inter, sans-serif">
+          <!-- card1 -->
+          <g transform="translate(8,8)">
+            <rect width="234" height="128" rx="12" fill="#FFF6EA" stroke="#F3D9AF"/>
+            <circle cx="34" cy="34" r="20" fill="#E8890C"/>
+            <use href="#ic-swap" x="22" y="22" width="24" height="24"/>
+            <text x="16" y="80" font-size="14" font-weight="700" fill="#16202B">固定費 → 変動費</text>
+            <text x="16" y="100" font-size="11.5" fill="#57626F">先行投資なしで始められる</text>
+          </g>
+          <!-- card2 -->
+          <g transform="translate(250,8)">
+            <rect width="234" height="128" rx="12" fill="#FFF6EA" stroke="#F3D9AF"/>
+            <circle cx="34" cy="34" r="20" fill="#E8890C"/>
+            <use href="#ic-scale" x="22" y="22" width="24" height="24"/>
+            <text x="16" y="80" font-size="14" font-weight="700" fill="#16202B">スケールメリット</text>
+            <text x="16" y="100" font-size="11.5" fill="#57626F">利用者が増えるほど単価が下がる</text>
+          </g>
+          <!-- card3 -->
+          <g transform="translate(492,8)">
+            <rect width="234" height="128" rx="12" fill="#FFF6EA" stroke="#F3D9AF"/>
+            <circle cx="34" cy="34" r="20" fill="#E8890C"/>
+            <use href="#ic-gauge" x="22" y="22" width="24" height="24"/>
+            <text x="16" y="80" font-size="14" font-weight="700" fill="#16202B">容量予測が不要</text>
+            <text x="16" y="100" font-size="11.5" fill="#57626F">使った分だけ課金される</text>
+          </g>
+          <!-- card4 -->
+          <g transform="translate(8,152)">
+            <rect width="234" height="128" rx="12" fill="#FFF6EA" stroke="#F3D9AF"/>
+            <circle cx="34" cy="34" r="20" fill="#E8890C"/>
+            <use href="#ic-bolt" x="22" y="22" width="24" height="24"/>
+            <text x="16" y="80" font-size="14" font-weight="700" fill="#16202B">スピードと俊敏性</text>
+            <text x="16" y="100" font-size="11.5" fill="#57626F">数分で環境を用意できる</text>
+          </g>
+          <!-- card5 -->
+          <g transform="translate(250,152)">
+            <rect width="234" height="128" rx="12" fill="#FFF6EA" stroke="#F3D9AF"/>
+            <circle cx="34" cy="34" r="20" fill="#E8890C"/>
+            <use href="#ic-nodc" x="22" y="22" width="24" height="24"/>
+            <text x="16" y="80" font-size="14" font-weight="700" fill="#16202B">運用の重労働から解放</text>
+            <text x="16" y="100" font-size="11.5" fill="#57626F">保守作業から開発に集中</text>
+          </g>
+          <!-- card6 -->
+          <g transform="translate(492,152)">
+            <rect width="234" height="128" rx="12" fill="#FFF6EA" stroke="#F3D9AF"/>
+            <circle cx="34" cy="34" r="20" fill="#E8890C"/>
+            <use href="#ic-globe" x="22" y="22" width="24" height="24"/>
+            <text x="16" y="80" font-size="14" font-weight="700" fill="#16202B">グローバル展開</text>
+            <text x="16" y="100" font-size="11.5" fill="#57626F">複数クリックで世界中に拡大</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption>図1-1: AWSクラウドの6つの価値提案</figcaption>
+    </figure>
+
+    <div class="tip"><b>覚え方:</b> 「固定→変動」「規模の経済」「予測不要」「速い」「楽になる」「世界へ」の6語を順番に唱えるだけでOK。試験では言い回しが変わっても意味が一致すれば正解です。</div>
+
+    <h3 class="sub"><span class="tag">1-2</span> クラウドの経済性:Capex から Opex へ</h3>
+    <p>従来のオンプレミス(自社データセンター)は、ピーク時の需要を予測して<b>先に一括で機器を購入</b>する必要がありました(Capex=資本的支出)。一方AWSクラウドでは、<b>使った分だけ後から支払う</b>ため(Opex=運用的支出)、需要に合わせて容量を伸縮でき、無駄がありません。</p>
+
+    <figure>
+      <svg viewBox="0 0 760 260" xmlns="http://www.w3.org/2000/svg">
+        <text x="30" y="20" font-size="13" font-weight="700" fill="#16202B" font-family="Space Grotesk, sans-serif">オンプレミス(先に一括購入 = Capex)</text>
+        <text x="390" y="20" font-size="13" font-weight="700" fill="#16202B" font-family="Space Grotesk, sans-serif">AWSクラウド(使った分だけ = Opex)</text>
+
+        <!-- axes -->
+        <line x1="30" y1="230" x2="370" y2="230" stroke="#C7CCD6" stroke-width="1.5"/>
+        <line x1="390" y1="230" x2="730" y2="230" stroke="#C7CCD6" stroke-width="1.5"/>
+        <!-- reference dashed capacity line -->
+        <line x1="30" y1="90" x2="370" y2="90" stroke="#8A93A3" stroke-width="1.5" stroke-dasharray="5,4"/>
+        <line x1="390" y1="90" x2="730" y2="90" stroke="#8A93A3" stroke-width="1.5" stroke-dasharray="5,4"/>
+
+        <!-- left panel bars: capacity(gray) + usage(orange) -->
+        <g>
+          <!-- bar1 -->
+          <rect x="56" y="90" width="28" height="140" fill="#E5E8EE"/><rect x="56" y="160" width="28" height="70" fill="#E8890C"/>
+          <rect x="93" y="90" width="28" height="140" fill="#E5E8EE"/><rect x="93" y="135" width="28" height="95" fill="#E8890C"/>
+          <rect x="130" y="90" width="28" height="140" fill="#E5E8EE"/><rect x="130" y="170" width="28" height="60" fill="#E8890C"/>
+          <rect x="167" y="90" width="28" height="140" fill="#E5E8EE"/><rect x="167" y="120" width="28" height="110" fill="#E8890C"/>
+          <rect x="204" y="90" width="28" height="140" fill="#E5E8EE"/><rect x="204" y="175" width="28" height="55" fill="#E8890C"/>
+          <rect x="241" y="90" width="28" height="140" fill="#E5E8EE"/><rect x="241" y="145" width="28" height="85" fill="#E8890C"/>
+          <rect x="278" y="90" width="28" height="140" fill="#E5E8EE"/><rect x="278" y="130" width="28" height="100" fill="#E8890C"/>
+          <rect x="315" y="90" width="28" height="140" fill="#E5E8EE"/><rect x="315" y="165" width="28" height="65" fill="#E8890C"/>
+        </g>
+        <!-- right panel bars: usage only, elastic -->
+        <g>
+          <rect x="416" y="160" width="28" height="70" fill="#E8890C"/>
+          <rect x="453" y="135" width="28" height="95" fill="#E8890C"/>
+          <rect x="490" y="170" width="28" height="60" fill="#E8890C"/>
+          <rect x="527" y="80" width="28" height="150" fill="#E8890C"/>
+          <rect x="564" y="175" width="28" height="55" fill="#E8890C"/>
+          <rect x="601" y="90" width="28" height="140" fill="#E8890C"/>
+          <rect x="638" y="130" width="28" height="100" fill="#E8890C"/>
+          <rect x="675" y="165" width="28" height="65" fill="#E8890C"/>
+        </g>
+
+        <text x="30" y="250" font-size="11" fill="#57626F">■ グレー = 買ってしまった容量(未使用でも課金) &nbsp; ■ オレンジ = 実際の利用量</text>
+        <text x="390" y="250" font-size="11" fill="#57626F">オレンジ = 利用量そのものが料金。破線を超えて伸縮も自由</text>
+      </svg>
+      <figcaption>図1-2: オンプレミス(Capex)とAWSクラウド(Opex)のコスト構造の違い</figcaption>
+    </figure>
+
+    <p>この考え方を数値で比較するツールが<b class="mono">AWS Pricing Calculator</b>や<b class="mono">TCO Calculator</b>です。オンプレミス運用とAWS運用の総保有コスト(TCO: Total Cost of Ownership)を試算し、経営層への説明資料として使われます。</p>
+
+    <h3 class="sub"><span class="tag">1-3</span> クラウド設計の基本原則</h3>
+    <p>AWS上でシステムを設計する際に意識すべきキーワードです。似た言葉が並ぶため、混同しやすいポイントでもあります。</p>
+    <table>
+      <tr><th>用語</th><th>意味</th><th>ひとことイメージ</th></tr>
+      <tr><td><b>可用性 (Availability)</b></td><td>システムが継続して利用できる度合い</td><td>止まらない</td></tr>
+      <tr><td><b>弾力性 (Elasticity)</b></td><td>需要に応じて自動でリソースを増減できる性質</td><td>伸び縮みする</td></tr>
+      <tr><td><b>俊敏性 (Agility)</b></td><td>新しいリソースを素早く用意・試行できる性質</td><td>すぐ試せる</td></tr>
+      <tr><td><b>耐障害性 (Fault Tolerance)</b></td><td>一部が故障してもサービス全体は継続する性質</td><td>壊れても平気</td></tr>
+      <tr><td><b>疎結合 (Loose Coupling)</b></td><td>コンポーネント同士の依存を減らし、個別に変更・拡張できる設計</td><td>部品ごとに独立</td></tr>
+    </table>
+
+    <div class="trap"><b>ひっかけ注意:</b> 「アクセスが急増したので自動でサーバー台数が増えた」は<b>弾力性(Elasticity)</b>の例です。「新機能のテスト環境を10分で作れた」は<b>俊敏性(Agility)</b>の例。この2つの選択肢を入れ替えて出題されることが非常に多いです。</div>
+
+    <div class="trap"><b>ひっかけ注意:</b> TCO Calculatorは「AWSの月額料金を見積もるツール」ではなく、<b>オンプレミス運用とAWS運用のコストを比較するツール</b>です。月額見積もりは <span class="mono">AWS Pricing Calculator</span> の役割です。</div>
+
+    <h3 class="sub"><span class="tag">確認問題</span> ドメイン① 理解度チェック</h3>
+
+    <details class="quiz"><summary><span class="qnum">Q1</span>ある企業が自社データセンターの廃止を検討している。AWSクラウド移行によって削減できる支出の変化として正しいものはどれか。</summary>
+      <div class="ans">A. 変動費(Opex)から固定費(Capex)への移行<br>B. 固定費(Capex)から変動費(Opex)への移行<br>C. 支出はどちらも変わらない<br>D. すべて無償になる<br><br><span class="correct">正解: B</span> — サーバー購入などの先行投資(Capex)が不要になり、使った分だけ支払う変動費(Opex)モデルに変わります。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q2</span>アクセス数の急増に応じて、AWSが自動的にリソース数を増減させる特性を表す用語はどれか。</summary>
+      <div class="ans">A. 俊敏性(Agility)<br>B. 耐久性(Durability)<br>C. 弾力性(Elasticity)<br>D. 可用性(Availability)<br><br><span class="correct">正解: C</span> — 需要に応じて自動でリソースが伸縮する性質が弾力性です。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q3</span>オンプレミス運用とAWS運用の総保有コストを比較する際に使うツールはどれか。</summary>
+      <div class="ans">A. AWS Budgets<br>B. AWS Cost Explorer<br>C. TCO Calculator<br>D. AWS Trusted Advisor<br><br><span class="correct">正解: C</span> — TCO Calculatorはオンプレミスとクラウドのコスト比較に特化したツールです。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q4</span>「新規プロジェクト用の開発環境を、申請から数分で用意できた」という事例が示すクラウドの利点はどれか。</summary>
+      <div class="ans">A. スケールメリット<br>B. 俊敏性(Agility)<br>C. 耐障害性<br>D. 疎結合<br><br><span class="correct">正解: B</span> — 新しい環境を素早く試せる性質が俊敏性です。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q5</span>多くの顧客がAWSのインフラを共有して利用することで、AWSの調達コストが下がり利用料金にも還元される仕組みを何と呼ぶか。</summary>
+      <div class="ans">A. 規模の経済(Economies of Scale)<br>B. 責任共有モデル<br>C. マルチAZ構成<br>D. リザーブドインスタンス<br><br><span class="correct">正解: A</span> — 利用者が増えるほど単価が下がる仕組みが規模の経済です。</div>
+    </details>
+  </section>
+
+  <!-- ============ DOMAIN 2 ============ -->
+  <section class="domain d2" id="d2">
+    <div class="domain-head">
+      <span class="domain-badge">配点 30%</span>
+    </div>
+    <h2 class="domain-title">② セキュリティ・コンプライアンス</h2>
+    <p class="domain-sub">責任共有モデル / IAM / セキュリティ関連サービスとリソース</p>
+    <div class="domain-divider bar"></div>
+
+    <p>配点が最も高い<b class="accent">30%</b>を占める最重要ドメインです。中心となるのは「<b>どこまでがAWSの責任で、どこからがお客様の責任か</b>」を理解する<b>責任共有モデル</b>と、「誰に何を許可するか」を管理する<b>IAM</b>です。</p>
+
+    <h3 class="sub"><span class="tag">2-1</span> 責任共有モデル (Shared Responsibility Model)</h3>
+    <p>AWSと利用者は、セキュリティの責任を分担します。AWSは「クラウド<b>そのもの</b>」の安全を守り、利用者は「クラウド<b>の中に置いたもの</b>」の安全を守ります。</p>
+
+    <figure>
+      <svg viewBox="0 0 720 330" xmlns="http://www.w3.org/2000/svg">
+        <!-- top box: customer -->
+        <rect x="20" y="10" width="680" height="130" rx="14" fill="#E8F8F7" stroke="#0FA3A3" stroke-width="1.5"/>
+        <text x="40" y="34" font-size="14.5" font-weight="700" fill="#0B6B6B" font-family="Space Grotesk, sans-serif">お客様の責任 — "クラウド の中" のセキュリティ (Security IN the Cloud)</text>
+        <g font-size="12" fill="#0B4949" font-family="Inter, sans-serif">
+          <rect x="40" y="46" width="200" height="34" rx="8" fill="#FFFFFF" stroke="#BFE7E5"/><text x="140" y="67" text-anchor="middle">データの暗号化</text>
+          <rect x="250" y="46" width="210" height="34" rx="8" fill="#FFFFFF" stroke="#BFE7E5"/><text x="355" y="67" text-anchor="middle">IAM設定(ユーザー/権限)</text>
+          <rect x="470" y="46" width="190" height="34" rx="8" fill="#FFFFFF" stroke="#BFE7E5"/><text x="565" y="67" text-anchor="middle">アプリケーション設定</text>
+          <rect x="145" y="90" width="220" height="34" rx="8" fill="#FFFFFF" stroke="#BFE7E5"/><text x="255" y="111" text-anchor="middle">OS・ミドルウェアの管理</text>
+          <rect x="375" y="90" width="230" height="34" rx="8" fill="#FFFFFF" stroke="#BFE7E5"/><text x="490" y="111" text-anchor="middle">ネットワーク設定(SG/NACL)</text>
+        </g>
+
+        <!-- divider -->
+        <text x="360" y="163" text-anchor="middle" font-size="11.5" fill="#57626F">▲ サービス形態(EC2などIaaS 〜 Lambda等マネージド)によって分岐点が変化 ▼</text>
+
+        <!-- bottom box: AWS -->
+        <rect x="20" y="180" width="680" height="130" rx="14" fill="#152234" stroke="#152234"/>
+        <text x="40" y="204" font-size="14.5" font-weight="700" fill="#FF9900" font-family="Space Grotesk, sans-serif">AWSの責任 — "クラウド 自体" のセキュリティ (Security OF the Cloud)</text>
+        <g font-size="12" fill="#EAF0F7" font-family="Inter, sans-serif">
+          <rect x="40" y="216" width="260" height="34" rx="8" fill="#24374F"/><text x="170" y="237" text-anchor="middle">グローバルインフラ(リージョン/AZ/エッジ)</text>
+          <rect x="315" y="216" width="150" height="34" rx="8" fill="#24374F"/><text x="390" y="237" text-anchor="middle">ハードウェア</text>
+          <rect x="480" y="216" width="180" height="34" rx="8" fill="#24374F"/><text x="570" y="237" text-anchor="middle">ネットワークの基盤</text>
+          <rect x="130" y="260" width="200" height="34" rx="8" fill="#24374F"/><text x="230" y="281" text-anchor="middle">仮想化基盤(ホストOS)</text>
+          <rect x="345" y="260" width="200" height="34" rx="8" fill="#24374F"/><text x="445" y="281" text-anchor="middle">物理的セキュリティ</text>
+        </g>
+      </svg>
+      <figcaption>図2-1: 責任共有モデル(Shared Responsibility Model)</figcaption>
+    </figure>
+
+    <div class="tip"><b>覚え方:</b> AWS = 「Of(建物・土台)」/ お客様 = 「In(中身)」。頭文字で <span class="mono">Of → 下段</span>、<span class="mono">In → 上段</span> と覚えると図とリンクします。</div>
+
+    <h3 class="sub"><span class="tag">2-2</span> IAM(Identity and Access Management)の全体像</h3>
+    <p>「誰が(Identity)」「何に(Resource)」「何をしてよいか(Permission)」を管理する仕組みがIAMです。<b>ルートユーザーは普段使わず</b>、日常操作にはIAMユーザーやロールを使うのがベストプラクティスです。</p>
+
+    <figure>
+      <svg viewBox="0 0 720 320" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="arrow2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+            <path d="M0 0L10 5L0 10z" fill="#8A93A3"/>
+          </marker>
+        </defs>
+        <!-- root -->
+        <rect x="270" y="10" width="180" height="50" rx="10" fill="#FCEEEE" stroke="#E1A6A6"/>
+        <text x="360" y="30" text-anchor="middle" font-size="12.5" font-weight="700" fill="#B23A3A">ルートユーザー</text>
+        <text x="360" y="46" text-anchor="middle" font-size="10.5" fill="#B23A3A">(最上位権限・普段は使わない)</text>
+
+        <!-- lines root -> 3 nodes -->
+        <path d="M360 60 V75 H130 V88" fill="none" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#arrow2)"/>
+        <path d="M360 60 V88" fill="none" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#arrow2)"/>
+        <path d="M360 60 V75 H590 V88" fill="none" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#arrow2)"/>
+
+        <!-- 3 nodes -->
+        <rect x="40" y="90" width="180" height="50" rx="10" fill="#E8F8F7" stroke="#0FA3A3"/>
+        <text x="130" y="112" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0B6B6B">IAMユーザー</text>
+        <text x="130" y="128" text-anchor="middle" font-size="10" fill="#0B6B6B">個人・アプリ単位の認証情報</text>
+
+        <rect x="270" y="90" width="180" height="50" rx="10" fill="#E8F8F7" stroke="#0FA3A3"/>
+        <text x="360" y="112" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0B6B6B">IAMグループ</text>
+        <text x="360" y="128" text-anchor="middle" font-size="10" fill="#0B6B6B">ユーザーの集合に一括権限付与</text>
+
+        <rect x="500" y="90" width="180" height="50" rx="10" fill="#E8F8F7" stroke="#0FA3A3"/>
+        <text x="590" y="112" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0B6B6B">IAMロール</text>
+        <text x="590" y="128" text-anchor="middle" font-size="10" fill="#0B6B6B">一時的に借りる権限(サービス間等)</text>
+
+        <!-- lines to policy -->
+        <path d="M130 140 V160 H345 V178" fill="none" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#arrow2)"/>
+        <path d="M360 140 V178" fill="none" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#arrow2)"/>
+        <path d="M590 140 V160 H375 V178" fill="none" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#arrow2)"/>
+
+        <!-- policy -->
+        <rect x="180" y="180" width="360" height="52" rx="10" fill="#FFF6EA" stroke="#E8890C"/>
+        <text x="360" y="202" text-anchor="middle" font-size="12.5" font-weight="700" fill="#8A4B00">IAMポリシー(JSON)</text>
+        <text x="360" y="219" text-anchor="middle" font-size="10.5" fill="#8A4B00">誰が・何に・何を許可/拒否するかを定義</text>
+
+        <path d="M360 232 V250" fill="none" stroke="#8A93A3" stroke-width="1.4" marker-end="url(#arrow2)"/>
+
+        <!-- resource -->
+        <rect x="210" y="252" width="300" height="50" rx="10" fill="#152234"/>
+        <text x="360" y="274" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">AWSリソース</text>
+        <text x="360" y="290" text-anchor="middle" font-size="10.5" fill="#C6D2E0">S3・EC2・DynamoDB など</text>
+      </svg>
+      <figcaption>図2-2: IAMの全体構造(ルート → ユーザー/グループ/ロール → ポリシー → リソース)</figcaption>
+    </figure>
+
+    <table>
+      <tr><th>種類</th><th>特徴</th><th>ベストプラクティス</th></tr>
+      <tr><td><b>ルートユーザー</b></td><td>アカウント作成時に自動生成される最上位権限</td><td>MFAを設定し、日常操作には使わない</td></tr>
+      <tr><td><b>IAMユーザー</b></td><td>個人やアプリケーションに紐づく恒久的な認証情報</td><td>最小権限の原則で必要な権限のみ付与</td></tr>
+      <tr><td><b>IAMグループ</b></td><td>複数ユーザーをまとめて同じ権限を付与する箱</td><td>役割ごと(開発者/経理など)にグループ化</td></tr>
+      <tr><td><b>IAMロール</b></td><td>必要なときだけ引き受ける一時的な権限</td><td>EC2やLambdaなどサービスに付与するのが基本</td></tr>
+    </table>
+
+    <h3 class="sub"><span class="tag">2-3</span> 主なセキュリティ関連サービス</h3>
+    <table>
+      <tr><th>サービス</th><th>ひとことで言うと</th></tr>
+      <tr><td class="mono">AWS Shield</td><td>DDoS攻撃からインフラを守る盾</td></tr>
+      <tr><td class="mono">AWS WAF</td><td>Webアプリへの不正リクエストを検査するファイアウォール</td></tr>
+      <tr><td class="mono">Amazon GuardDuty</td><td>アカウント内の不審な挙動を継続的に検知する監視役</td></tr>
+      <tr><td class="mono">AWS KMS</td><td>暗号化キーを一元管理する金庫</td></tr>
+      <tr><td class="mono">AWS Artifact</td><td>コンプライアンス関連の監査レポートを取得できる資料庫</td></tr>
+      <tr><td class="mono">Amazon Inspector</td><td>EC2やコンテナの脆弱性を自動スキャン</td></tr>
+      <tr><td class="mono">AWS Config</td><td>リソースの構成変更履歴を記録・追跡</td></tr>
+      <tr><td class="mono">AWS Organizations</td><td>複数アカウントをまとめて管理・統制</td></tr>
+    </table>
+
+    <div class="trap"><b>ひっかけ注意:</b> <span class="mono">Shield</span>(DDoS対策)・<span class="mono">WAF</span>(Webリクエストのフィルタ)・<span class="mono">GuardDuty</span>(脅威の検知・監視)は役割が異なります。「守る対象」で覚えましょう:Shield=インフラ全体、WAF=Webアプリの入口、GuardDuty=異常の発見。</div>
+    <div class="trap"><b>ひっかけ注意:</b> <span class="mono">AWS Artifact</span>(コンプライアンス"文書"の取得)と<span class="mono">AWS Config</span>(リソース"設定変更"の記録)は名前が似ていますが用途が全く異なります。</div>
+
+    <h3 class="sub"><span class="tag">確認問題</span> ドメイン② 理解度チェック</h3>
+
+    <details class="quiz"><summary><span class="qnum">Q1</span>責任共有モデルにおいて、AWSが責任を負う範囲はどれか。</summary>
+      <div class="ans">A. EC2インスタンス上のOSパッチ適用<br>B. データセンターの物理的セキュリティ<br>C. IAMユーザーのパスワード管理<br>D. アプリケーションのデータ暗号化<br><br><span class="correct">正解: B</span> — 物理的な設備やハードウェアの保護は「クラウド"自体"の安全」としてAWSの責任範囲です。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q2</span>複数のIAMユーザーに同じ権限をまとめて付与したい場合、最も適切な方法はどれか。</summary>
+      <div class="ans">A. 各ユーザーにルートユーザーの認証情報を共有する<br>B. IAMグループを作成し、そこにユーザーを追加する<br>C. すべてのユーザーで1つのIAMユーザーを共用する<br>D. IAMロールをユーザーに永続的に割り当てる<br><br><span class="correct">正解: B</span> — 同じ権限が必要な複数ユーザーはIAMグループでまとめて管理するのが基本です。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q3</span>アカウント内の不審なAPI呼び出しやポートスキャンなどの脅威を継続的に検知するサービスはどれか。</summary>
+      <div class="ans">A. AWS Shield<br>B. Amazon GuardDuty<br>C. AWS WAF<br>D. AWS Artifact<br><br><span class="correct">正解: B</span> — Amazon GuardDutyはアカウント内の異常な挙動を継続的に監視・検知します。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q4</span>監査対応のため、AWSのコンプライアンス認証レポートを入手したい。利用すべきサービスはどれか。</summary>
+      <div class="ans">A. AWS Config<br>B. AWS Trusted Advisor<br>C. AWS Artifact<br>D. Amazon Inspector<br><br><span class="correct">正解: C</span> — AWS Artifactはコンプライアンス関連の各種レポートをオンデマンドで取得できるサービスです。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q5</span>EC2インスタンスからS3バケットへ安全にアクセスさせたい。ベストプラクティスはどれか。</summary>
+      <div class="ans">A. IAMユーザーのアクセスキーをEC2にハードコーディングする<br>B. ルートユーザーの認証情報を使う<br>C. EC2インスタンスにIAMロールを割り当てる<br>D. S3バケットを全世界に公開する<br><br><span class="correct">正解: C</span> — サービス間のアクセスにはアクセスキーの埋め込みではなく、一時的な権限を発行するIAMロールを使うのがベストプラクティスです。</div>
+    </details>
+  </section>
+
+  <!-- ============ DOMAIN 3 ============ -->
+  <section class="domain d3" id="d3">
+    <div class="domain-head">
+      <span class="domain-badge">配点 34%</span>
+    </div>
+    <h2 class="domain-title">③ クラウド技術・サービス</h2>
+    <p class="domain-sub">デプロイ・運用方法 / グローバルインフラ / 主要サービス / 技術サポート</p>
+    <div class="domain-divider bar"></div>
+
+    <p>配点34%と<b class="accent">最大のドメイン</b>です。範囲は広いですが、「AWSにどう指示を出すか」「世界のどこで動いているか」「代表的なサービスは何か」の3点セットで整理すると覚えやすくなります。</p>
+
+    <h3 class="sub"><span class="tag">3-1</span> AWSへのアクセス・デプロイ方法</h3>
+    <p>AWSの操作方法は用途によって使い分けます。特に<b>IaC(Infrastructure as Code)</b>は「手順書ではなくコードでインフラを再現可能にする」考え方として頻出です。</p>
+
+    <figure>
+      <svg viewBox="0 0 740 175" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <symbol id="ic-console" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="1.5" stroke="#fff" stroke-width="2" fill="none"/><line x1="3" y1="9" x2="21" y2="9" stroke="#fff" stroke-width="2"/><circle cx="6" cy="7" r="0.7" fill="#fff"/></symbol>
+          <symbol id="ic-cli" viewBox="0 0 24 24"><rect x="2.5" y="4" width="19" height="16" rx="1.5" stroke="#fff" stroke-width="2" fill="none"/><path d="M6 9l4 4-4 4" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><line x1="12" y1="17" x2="17" y2="17" stroke="#fff" stroke-width="2" stroke-linecap="round"/></symbol>
+          <symbol id="ic-sdk" viewBox="0 0 24 24"><path d="M9 6L3 12l6 6M15 6l6 6-6 6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+          <symbol id="ic-iac" viewBox="0 0 24 24"><path d="M12 3l9 4.5-9 4.5-9-4.5L12 3z" stroke="#fff" stroke-width="1.8" fill="none" stroke-linejoin="round"/><path d="M3 12l9 4.5 9-4.5M3 16.5l9 4.5 9-4.5" stroke="#fff" stroke-width="1.8" fill="none" stroke-linejoin="round"/></symbol>
+        </defs>
+        <g font-family="Inter, sans-serif">
+          <g transform="translate(8,8)">
+            <rect width="172" height="150" rx="12" fill="#F1EEFC" stroke="#D4CBF5"/>
+            <circle cx="30" cy="34" r="20" fill="#6A5AE0"/><use href="#ic-console" x="18" y="22" width="24" height="24"/>
+            <text x="14" y="80" font-size="13.5" font-weight="700" fill="#16202B">Management Console</text>
+            <text x="14" y="98" font-size="11" fill="#57626F">ブラウザでGUI操作</text>
+            <text x="14" y="116" font-size="11" fill="#57626F">初学者・可視化に向く</text>
+          </g>
+          <g transform="translate(188,8)">
+            <rect width="172" height="150" rx="12" fill="#F1EEFC" stroke="#D4CBF5"/>
+            <circle cx="30" cy="34" r="20" fill="#6A5AE0"/><use href="#ic-cli" x="18" y="22" width="24" height="24"/>
+            <text x="14" y="80" font-size="13.5" font-weight="700" fill="#16202B">AWS CLI</text>
+            <text x="14" y="98" font-size="11" fill="#57626F">コマンドで操作</text>
+            <text x="14" y="116" font-size="11" fill="#57626F">自動化スクリプトに向く</text>
+          </g>
+          <g transform="translate(368,8)">
+            <rect width="172" height="150" rx="12" fill="#F1EEFC" stroke="#D4CBF5"/>
+            <circle cx="30" cy="34" r="20" fill="#6A5AE0"/><use href="#ic-sdk" x="18" y="22" width="24" height="24"/>
+            <text x="14" y="80" font-size="13.5" font-weight="700" fill="#16202B">SDK</text>
+            <text x="14" y="98" font-size="11" fill="#57626F">アプリからプログラムで操作</text>
+            <text x="14" y="116" font-size="11" fill="#57626F">Python/Java等 各言語対応</text>
+          </g>
+          <g transform="translate(548,8)">
+            <rect width="172" height="150" rx="12" fill="#F1EEFC" stroke="#D4CBF5"/>
+            <circle cx="30" cy="34" r="20" fill="#6A5AE0"/><use href="#ic-iac" x="18" y="22" width="24" height="24"/>
+            <text x="14" y="80" font-size="13.5" font-weight="700" fill="#16202B">IaC (CloudFormation)</text>
+            <text x="14" y="98" font-size="11" fill="#57626F">コードでインフラを定義</text>
+            <text x="14" y="116" font-size="11" fill="#57626F">再現性・バージョン管理が容易</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption>図3-1: AWSを操作する4つの方法</figcaption>
+    </figure>
+
+    <table>
+      <tr><th>デプロイモデル</th><th>特徴</th><th>向いているケース</th></tr>
+      <tr><td><b>クラウド</b></td><td>すべてのリソースをAWS上で運用</td><td>新規サービス、スケール重視</td></tr>
+      <tr><td><b>オンプレミス</b></td><td>自社データセンターで完結</td><td>規制上クラウド利用が難しい環境</td></tr>
+      <tr><td><b>ハイブリッド</b></td><td>オンプレミスとAWSを組み合わせて運用</td><td>段階的な移行、既存資産の活用</td></tr>
+    </table>
+
+    <h3 class="sub"><span class="tag">3-2</span> AWSグローバルインフラストラクチャ</h3>
+    <p>AWSは世界中に<b>リージョン</b>を持ち、各リージョンは独立した複数の<b>アベイラビリティーゾーン(AZ)</b>で構成されます。さらに、コンテンツ配信を高速化する<b>エッジロケーション</b>が世界中に分散配置されています。</p>
+
+    <figure>
+      <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg">
+        <rect x="30" y="40" width="430" height="230" rx="16" fill="#F1EEFC" stroke="#6A5AE0" stroke-width="1.5"/>
+        <text x="50" y="66" font-size="14" font-weight="700" fill="#4A3DAE" font-family="Space Grotesk, sans-serif">リージョン (Region)</text>
+        <text x="50" y="84" font-size="10.5" fill="#6B6485">例: 東京(ap-northeast-1) — 世界に30以上存在</text>
+
+        <!-- AZ boxes -->
+        <g font-family="Inter, sans-serif">
+          <rect x="52" y="100" width="126" height="150" rx="10" fill="#FFFFFF" stroke="#B9ACEF"/>
+          <text x="115" y="122" text-anchor="middle" font-size="12.5" font-weight="700" fill="#16202B">AZ-a</text>
+          <rect x="70" y="134" width="90" height="24" rx="5" fill="#6A5AE0"/><text x="115" y="150" text-anchor="middle" font-size="9.5" fill="#fff">データセンター1</text>
+          <rect x="70" y="166" width="90" height="24" rx="5" fill="#6A5AE0"/><text x="115" y="182" text-anchor="middle" font-size="9.5" fill="#fff">データセンター2</text>
+
+          <rect x="196" y="100" width="126" height="150" rx="10" fill="#FFFFFF" stroke="#B9ACEF"/>
+          <text x="259" y="122" text-anchor="middle" font-size="12.5" font-weight="700" fill="#16202B">AZ-b</text>
+          <rect x="214" y="134" width="90" height="24" rx="5" fill="#6A5AE0"/><text x="259" y="150" text-anchor="middle" font-size="9.5" fill="#fff">データセンター1</text>
+          <rect x="214" y="166" width="90" height="24" rx="5" fill="#6A5AE0"/><text x="259" y="182" text-anchor="middle" font-size="9.5" fill="#fff">データセンター2</text>
+
+          <rect x="340" y="100" width="126" height="150" rx="10" fill="#FFFFFF" stroke="#B9ACEF" transform="translate(-24,0)"/>
+          <text x="379" y="122" text-anchor="middle" font-size="12.5" font-weight="700" fill="#16202B">AZ-c</text>
+          <rect x="334" y="134" width="90" height="24" rx="5" fill="#6A5AE0"/><text x="379" y="150" text-anchor="middle" font-size="9.5" fill="#fff">データセンター1</text>
+          <rect x="334" y="166" width="90" height="24" rx="5" fill="#6A5AE0"/><text x="379" y="182" text-anchor="middle" font-size="9.5" fill="#fff">データセンター2</text>
+        </g>
+        <text x="245" y="230" text-anchor="middle" font-size="10" fill="#6B6485">各AZは独立した1つ以上のデータセンターで構成</text>
+        <text x="245" y="246" text-anchor="middle" font-size="10" fill="#6B6485">→ 複数AZに分散配置すると災害・障害に強くなる</text>
+
+        <!-- Edge cluster -->
+        <text x="500" y="60" font-size="13" font-weight="700" fill="#16202B" font-family="Space Grotesk, sans-serif">エッジロケーション</text>
+        <text x="500" y="76" font-size="10.5" fill="#57626F">(Amazon CloudFront など)</text>
+        <circle cx="600" cy="165" r="26" fill="#fff" stroke="#6A5AE0" stroke-width="2"/>
+        <path d="M576 165h48M600 139c8 8 8 44 0 52M600 139c-8 8-8 44 0 52" stroke="#6A5AE0" stroke-width="1.6" fill="none"/>
+        <g stroke="#B9ACEF" stroke-width="1.3">
+          <line x1="600" y1="165" x2="600" y2="100"/>
+          <line x1="600" y1="165" x2="662" y2="128"/>
+          <line x1="600" y1="165" x2="672" y2="190"/>
+          <line x1="600" y1="165" x2="618" y2="232"/>
+          <line x1="600" y1="165" x2="548" y2="222"/>
+          <line x1="600" y1="165" x2="528" y2="150"/>
+        </g>
+        <g fill="#6A5AE0">
+          <circle cx="600" cy="100" r="6"/><circle cx="662" cy="128" r="6"/><circle cx="672" cy="190" r="6"/>
+          <circle cx="618" cy="232" r="6"/><circle cx="548" cy="222" r="6"/><circle cx="528" cy="150" r="6"/>
+        </g>
+        <text x="600" y="266" text-anchor="middle" font-size="10" fill="#6B6485">ユーザーの近くから配信</text>
+        <text x="600" y="280" text-anchor="middle" font-size="10" fill="#6B6485">→ 低レイテンシーを実現</text>
+        <path d="M460 150 H495" stroke="#8A93A3" stroke-width="1.4" stroke-dasharray="4,4"/>
+      </svg>
+      <figcaption>図3-2: リージョン・AZ・エッジロケーションの関係</figcaption>
+    </figure>
+
+    <div class="note"><b>グローバルサービス vs リージョナルサービス:</b> IAM・Amazon Route 53・Amazon CloudFrontなどは<b>すべてのリージョンで共通(グローバル)</b>のサービスです。一方EC2やRDSなど<b>ほとんどのサービスはリージョン単位</b>で作成・管理します。</div>
+
+    <h3 class="sub"><span class="tag">3-3</span> 主要サービスの全体像</h3>
+    <p>試験範囲は広大ですが、CLFレベルでは「カテゴリと代表サービス」のペアで覚えれば十分です。</p>
+
+    <figure>
+      <svg viewBox="0 0 720 200" xmlns="http://www.w3.org/2000/svg">
+        <g font-family="Inter, sans-serif">
+          <!-- compute -->
+          <rect x="22" y="10" width="165" height="32" rx="8" fill="#E8890C"/><text x="105" y="31" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">コンピューティング</text>
+          <rect x="22" y="50" width="165" height="38" rx="8" fill="#fff" stroke="#E8890C"/><text x="105" y="66" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">Amazon EC2</text><text x="105" y="80" text-anchor="middle" font-size="9.5" fill="#57626F">仮想サーバー</text>
+          <rect x="22" y="96" width="165" height="38" rx="8" fill="#fff" stroke="#E8890C"/><text x="105" y="112" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">AWS Lambda</text><text x="105" y="126" text-anchor="middle" font-size="9.5" fill="#57626F">サーバーレス実行</text>
+          <rect x="22" y="142" width="165" height="38" rx="8" fill="#fff" stroke="#E8890C"/><text x="105" y="158" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">Amazon ECS/EKS</text><text x="105" y="172" text-anchor="middle" font-size="9.5" fill="#57626F">コンテナ実行</text>
+
+          <!-- storage -->
+          <rect x="192" y="10" width="165" height="32" rx="8" fill="#3B82C4"/><text x="275" y="31" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">ストレージ</text>
+          <rect x="192" y="50" width="165" height="38" rx="8" fill="#fff" stroke="#3B82C4"/><text x="275" y="66" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">Amazon S3</text><text x="275" y="80" text-anchor="middle" font-size="9.5" fill="#57626F">オブジェクトストレージ</text>
+          <rect x="192" y="96" width="165" height="38" rx="8" fill="#fff" stroke="#3B82C4"/><text x="275" y="112" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">Amazon EBS</text><text x="275" y="126" text-anchor="middle" font-size="9.5" fill="#57626F">ブロックストレージ(EC2用)</text>
+          <rect x="192" y="142" width="165" height="38" rx="8" fill="#fff" stroke="#3B82C4"/><text x="275" y="158" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">Amazon EFS</text><text x="275" y="172" text-anchor="middle" font-size="9.5" fill="#57626F">共有ファイルストレージ</text>
+
+          <!-- database -->
+          <rect x="362" y="10" width="165" height="32" rx="8" fill="#0FA3A3"/><text x="445" y="31" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">データベース</text>
+          <rect x="362" y="50" width="165" height="38" rx="8" fill="#fff" stroke="#0FA3A3"/><text x="445" y="66" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">Amazon RDS</text><text x="445" y="80" text-anchor="middle" font-size="9.5" fill="#57626F">リレーショナルDB</text>
+          <rect x="362" y="96" width="165" height="38" rx="8" fill="#fff" stroke="#0FA3A3"/><text x="445" y="112" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">Amazon DynamoDB</text><text x="445" y="126" text-anchor="middle" font-size="9.5" fill="#57626F">NoSQLデータベース</text>
+          <rect x="362" y="142" width="165" height="38" rx="8" fill="#fff" stroke="#0FA3A3"/><text x="445" y="158" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">Amazon Redshift</text><text x="445" y="172" text-anchor="middle" font-size="9.5" fill="#57626F">データウェアハウス</text>
+
+          <!-- networking -->
+          <rect x="532" y="10" width="165" height="32" rx="8" fill="#6A5AE0"/><text x="615" y="31" text-anchor="middle" font-size="12.5" font-weight="700" fill="#fff">ネットワーキング</text>
+          <rect x="532" y="50" width="165" height="38" rx="8" fill="#fff" stroke="#6A5AE0"/><text x="615" y="66" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">Amazon VPC</text><text x="615" y="80" text-anchor="middle" font-size="9.5" fill="#57626F">仮想ネットワーク</text>
+          <rect x="532" y="96" width="165" height="38" rx="8" fill="#fff" stroke="#6A5AE0"/><text x="615" y="112" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">Amazon Route 53</text><text x="615" y="126" text-anchor="middle" font-size="9.5" fill="#57626F">DNSサービス</text>
+          <rect x="532" y="142" width="165" height="38" rx="8" fill="#fff" stroke="#6A5AE0"/><text x="615" y="158" text-anchor="middle" font-size="11" font-weight="700" fill="#16202B" class="mono">Amazon CloudFront</text><text x="615" y="172" text-anchor="middle" font-size="9.5" fill="#57626F">CDN配信</text>
+        </g>
+      </svg>
+      <figcaption>図3-3: カテゴリ別・代表的なAWSサービス</figcaption>
+    </figure>
+
+    <div class="trap"><b>ひっかけ注意:</b> <span class="mono">EC2</span>(常時起動のサーバー、自分で管理)と<span class="mono">Lambda</span>(コード実行時のみ課金、サーバー管理不要)は対比でよく出題されます。「サーバーレス」というキーワードが出たらLambdaを疑いましょう。</div>
+    <div class="trap"><b>ひっかけ注意:</b> <span class="mono">Auto Scaling</span>(サーバー台数を需要に応じ自動調整)と<span class="mono">Elastic Load Balancing</span>(複数サーバーへ通信を振り分け)は必ずセットで機能しますが、役割は別物です。</div>
+
+    <h3 class="sub"><span class="tag">3-4</span> 技術サポートのためのリソース</h3>
+    <table>
+      <tr><th>リソース</th><th>役割</th></tr>
+      <tr><td class="mono">AWS Documentation</td><td>各サービスの公式ドキュメント</td></tr>
+      <tr><td class="mono">AWS Whitepapers</td><td>ベストプラクティスをまとめた公式技術文書</td></tr>
+      <tr><td class="mono">AWS re:Post</td><td>AWSが運営するQ&amp;Aコミュニティ</td></tr>
+      <tr><td class="mono">AWS Well-Architected Tool</td><td>設計を6つの柱に沿ってセルフレビュー</td></tr>
+      <tr><td class="mono">AWS Trusted Advisor</td><td>コスト・パフォーマンス・セキュリティ等を自動診断</td></tr>
+    </table>
+
+    <h3 class="sub"><span class="tag">確認問題</span> ドメイン③ 理解度チェック</h3>
+
+    <details class="quiz"><summary><span class="qnum">Q1</span>インフラ構成をコードで定義し、同じ環境を何度でも再現できるようにする方法はどれか。</summary>
+      <div class="ans">A. Management Consoleでの手動構築<br>B. Infrastructure as Code (例: AWS CloudFormation)<br>C. AWS Artifact<br>D. Amazon Inspector<br><br><span class="correct">正解: B</span> — IaCはコードでインフラを定義し、再現性のあるデプロイを可能にします。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q2</span>1つのリージョン内で、独立した電源・ネットワークを持つ物理的に離れた場所の単位はどれか。</summary>
+      <div class="ans">A. エッジロケーション<br>B. アベイラビリティーゾーン(AZ)<br>C. VPC<br>D. データセンター単体<br><br><span class="correct">正解: B</span> — AZはリージョン内で独立した1つ以上のデータセンターの集合です。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q3</span>コードを実行した分だけ課金され、サーバーの管理が不要なコンピューティングサービスはどれか。</summary>
+      <div class="ans">A. Amazon EC2<br>B. Amazon EBS<br>C. AWS Lambda<br>D. Amazon VPC<br><br><span class="correct">正解: C</span> — AWS Lambdaはサーバーレスで、実行時間に応じて課金されます。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q4</span>すべてのAWSリージョンで共通して利用される、リージョンを指定せずに使うサービスはどれか。</summary>
+      <div class="ans">A. Amazon EC2<br>B. Amazon RDS<br>C. AWS IAM<br>D. Amazon EBS<br><br><span class="correct">正解: C</span> — IAMはグローバルサービスであり、特定のリージョンに属しません。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q5</span>複数のEC2インスタンスへのアクセスを均等に振り分けたい場合に使うサービスはどれか。</summary>
+      <div class="ans">A. AWS Auto Scaling<br>B. Elastic Load Balancing (ELB)<br>C. Amazon Route 53<br>D. Amazon CloudFront<br><br><span class="correct">正解: B</span> — ELBは複数インスタンスへ通信を分散させる仕組みです。台数の自動調整はAuto Scalingの役割です。</div>
+    </details>
+  </section>
+
+  <!-- ============ DOMAIN 4 ============ -->
+  <section class="domain d4" id="d4">
+    <div class="domain-head">
+      <span class="domain-badge">配点 12%</span>
+    </div>
+    <h2 class="domain-title">④ 請求・料金・サポート</h2>
+    <p class="domain-sub">料金モデル / コスト管理ツール / サポートプラン</p>
+    <div class="domain-divider bar"></div>
+
+    <p>配点は最も低い12%ですが、出題範囲が狭い分、<b>確実に得点できるドメイン</b>です。料金モデルの種類とサポートプランの違いを表で押さえましょう。</p>
+
+    <h3 class="sub"><span class="tag">4-1</span> 4つの料金モデル</h3>
+
+    <figure>
+      <svg viewBox="0 0 740 175" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <symbol id="ic-ondemand" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" stroke="#fff" stroke-width="2" fill="none"/><path d="M12 7v5l4 2" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></symbol>
+          <symbol id="ic-reserved" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="2" stroke="#fff" stroke-width="2" fill="none"/><path d="M3 10h18M8 3v4M16 3v4" stroke="#fff" stroke-width="2"/></symbol>
+          <symbol id="ic-spot" viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z" fill="#fff"/></symbol>
+          <symbol id="ic-savings" viewBox="0 0 24 24"><path d="M3 17l6-6 4 4 8-9" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M15 6h6v6" stroke="#fff" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+        </defs>
+        <g font-family="Inter, sans-serif">
+          <g transform="translate(8,8)">
+            <rect width="172" height="150" rx="12" fill="#EAF6EE" stroke="#BFE3CB"/>
+            <circle cx="30" cy="34" r="20" fill="#2E9E5B"/><use href="#ic-ondemand" x="18" y="22" width="24" height="24"/>
+            <text x="14" y="80" font-size="13" font-weight="700" fill="#16202B">オンデマンド</text>
+            <text x="14" y="98" font-size="10.5" fill="#57626F">契約なし・使った分だけ</text>
+            <text x="14" y="114" font-size="10.5" fill="#57626F">最も柔軟だが単価は高め</text>
+          </g>
+          <g transform="translate(188,8)">
+            <rect width="172" height="150" rx="12" fill="#EAF6EE" stroke="#BFE3CB"/>
+            <circle cx="30" cy="34" r="20" fill="#2E9E5B"/><use href="#ic-reserved" x="18" y="22" width="24" height="24"/>
+            <text x="14" y="80" font-size="13" font-weight="700" fill="#16202B">リザーブド</text>
+            <text x="14" y="98" font-size="10.5" fill="#57626F">1〜3年の利用を契約</text>
+            <text x="14" y="114" font-size="10.5" fill="#57626F">大幅割引・安定稼働向け</text>
+          </g>
+          <g transform="translate(368,8)">
+            <rect width="172" height="150" rx="12" fill="#EAF6EE" stroke="#BFE3CB"/>
+            <circle cx="30" cy="34" r="20" fill="#2E9E5B"/><use href="#ic-spot" x="18" y="22" width="24" height="24"/>
+            <text x="14" y="80" font-size="13" font-weight="700" fill="#16202B">スポット</text>
+            <text x="14" y="98" font-size="10.5" fill="#57626F">余剰キャパシティを利用</text>
+            <text x="14" y="114" font-size="10.5" fill="#57626F">最大級の割引・中断の可能性</text>
+          </g>
+          <g transform="translate(548,8)">
+            <rect width="172" height="150" rx="12" fill="#EAF6EE" stroke="#BFE3CB"/>
+            <circle cx="30" cy="34" r="20" fill="#2E9E5B"/><use href="#ic-savings" x="18" y="22" width="24" height="24"/>
+            <text x="14" y="80" font-size="13" font-weight="700" fill="#16202B">Savings Plans</text>
+            <text x="14" y="98" font-size="10.5" fill="#57626F">利用金額をコミット</text>
+            <text x="14" y="114" font-size="10.5" fill="#57626F">インスタンス変更にも柔軟</text>
+          </g>
+        </g>
+      </svg>
+      <figcaption>図4-1: 4つの料金モデル(コミットが強いほど割引は大きく、柔軟性は下がる)</figcaption>
+    </figure>
+
+    <div class="tip"><b>覚え方:</b> 割引の大きさは「スポット &gt; リザーブド ≒ Savings Plans &gt; オンデマンド」。柔軟性はその逆順。「割引が欲しければ、その分自由を手放す」と覚えると迷いません。</div>
+
+    <h3 class="sub"><span class="tag">4-2</span> コスト管理ツール</h3>
+    <table>
+      <tr><th>ツール</th><th>役割</th></tr>
+      <tr><td class="mono">AWS Pricing Calculator</td><td>利用前に月額費用を見積もる</td></tr>
+      <tr><td class="mono">AWS Cost Explorer</td><td>過去〜現在の利用料金をグラフで可視化・分析</td></tr>
+      <tr><td class="mono">AWS Budgets</td><td>予算を設定し、超過しそうな時にアラート通知</td></tr>
+      <tr><td class="mono">AWS Cost and Usage Report</td><td>最も詳細な利用データをCSV等で出力</td></tr>
+      <tr><td class="mono">Consolidated Billing</td><td>複数アカウントの請求を一本化し、割引をまとめて適用</td></tr>
+    </table>
+
+    <h3 class="sub"><span class="tag">4-3</span> サポートプランの比較</h3>
+    <table>
+      <tr><th>プラン</th><th>想定利用者</th><th>特徴</th></tr>
+      <tr><td><b>Basic</b></td><td>すべての利用者</td><td>無料。ドキュメントやフォーラムなどセルフサービスのみ</td></tr>
+      <tr><td><b>Developer</b></td><td>検証・開発段階</td><td>メール中心の技術サポート</td></tr>
+      <tr><td><b>Business</b></td><td>本番環境で運用中</td><td>24時間365日、電話・チャット・メールで対応</td></tr>
+      <tr><td><b>Enterprise</b></td><td>ミッションクリティカルな運用</td><td>専任の技術担当(TAM)が付き、最優先で対応</td></tr>
+    </table>
+
+    <div class="trap"><b>ひっかけ注意:</b> Basicサポートは<b>無料</b>ですが、<b>電話やチャットでの個別サポートは含まれません</b>。「無料=フル対応」ではない点が狙われます。</div>
+    <div class="trap"><b>ひっかけ注意:</b> 無料利用枠(Free Tier)には「12か月間無料」「常に無料」「トライアル」の3種類があり、サービスによって条件が異なります。</div>
+
+    <h3 class="sub"><span class="tag">確認問題</span> ドメイン④ 理解度チェック</h3>
+
+    <details class="quiz"><summary><span class="qnum">Q1</span>中断されても問題ない処理を、最も低コストで実行したい。適した料金モデルはどれか。</summary>
+      <div class="ans">A. オンデマンド<br>B. リザーブドインスタンス<br>C. スポットインスタンス<br>D. Savings Plans<br><br><span class="correct">正解: C</span> — スポットインスタンスはAWSの余剰キャパシティを使うため最大級の割引が得られますが、中断される可能性があります。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q2</span>本番環境を24時間365日運用しており、電話やチャットでの技術サポートが必要な場合、最低限必要なサポートプランはどれか。</summary>
+      <div class="ans">A. Basic<br>B. Developer<br>C. Business<br>D. Enterprise<br><br><span class="correct">正解: C</span> — 24時間365日の電話・チャット対応が必要な場合はBusiness以上が必要です。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q3</span>複数のAWSアカウントを1つの請求にまとめ、ボリュームディスカウントを適用したい場合に使う機能はどれか。</summary>
+      <div class="ans">A. AWS Budgets<br>B. Consolidated Billing<br>C. AWS Cost Explorer<br>D. TCO Calculator<br><br><span class="correct">正解: B</span> — Consolidated Billingで複数アカウントの請求を一本化し、割引をまとめて適用できます。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q4</span>今後1年間、常に一定量のEC2を使い続けることが分かっている場合、コストを最も抑えられる方法はどれか。</summary>
+      <div class="ans">A. オンデマンドのまま利用する<br>B. リザーブドインスタンスを購入する<br>C. Basicサポートに切り替える<br>D. スポットインスタンスのみ利用する<br><br><span class="correct">正解: B</span> — 利用量が予測できる場合、1年以上の契約を前提とするリザーブドインスタンスで大幅な割引が受けられます。</div>
+    </details>
+
+    <details class="quiz"><summary><span class="qnum">Q5</span>今月のAWS利用料金が予算を超えそうになったら自動で通知を受け取りたい。使うべきサービスはどれか。</summary>
+      <div class="ans">A. AWS Cost Explorer<br>B. AWS Budgets<br>C. AWS Pricing Calculator<br>D. AWS Cost and Usage Report<br><br><span class="correct">正解: B</span> — AWS Budgetsは予算のしきい値を設定し、超過しそうな際にアラートを送信します。</div>
+    </details>
+  </section>
+
+  <!-- ============ SUMMARY ============ -->
+  <section class="domain" id="summary" style="margin-top:70px;">
+    <h2 class="domain-title" style="font-size:22px;">🗺 全体まとめ:4ドメインの関係</h2>
+    <p class="domain-sub">試験全体を1枚の図で振り返る</p>
+    <div class="domain-divider bar" style="background:linear-gradient(90deg,#E8890C,#0FA3A3,#6A5AE0,#2E9E5B);"></div>
+
+    <figure>
+      <svg viewBox="0 0 760 540" xmlns="http://www.w3.org/2000/svg">
+        <g font-family="Inter, sans-serif" font-size="11">
+          <!-- connecting lines -->
+          <line x1="380" y1="192" x2="380" y2="90" stroke="#E8890C" stroke-width="1.6"/>
+          <line x1="448" y1="260" x2="560" y2="235" stroke="#0FA3A3" stroke-width="1.6"/>
+          <line x1="380" y1="328" x2="380" y2="430" stroke="#6A5AE0" stroke-width="1.6"/>
+          <line x1="312" y1="260" x2="200" y2="235" stroke="#2E9E5B" stroke-width="1.6"/>
+
+          <!-- keyword connector lines -->
+          <line x1="320" y1="65" x2="240" y2="31" stroke="#E8890C" stroke-width="1.2"/>
+          <line x1="440" y1="65" x2="520" y2="31" stroke="#E8890C" stroke-width="1.2"/>
+          <line x1="650" y1="210" x2="655" y2="180" stroke="#0FA3A3" stroke-width="1.2"/>
+          <line x1="650" y1="260" x2="655" y2="270" stroke="#0FA3A3" stroke-width="1.2"/>
+          <line x1="330" y1="480" x2="125" y2="490" stroke="#6A5AE0" stroke-width="1.2"/>
+          <line x1="380" y1="480" x2="380" y2="490" stroke="#6A5AE0" stroke-width="1.2"/>
+          <line x1="430" y1="480" x2="635" y2="490" stroke="#6A5AE0" stroke-width="1.2"/>
+          <line x1="110" y1="210" x2="105" y2="180" stroke="#2E9E5B" stroke-width="1.2"/>
+          <line x1="110" y1="260" x2="105" y2="270" stroke="#2E9E5B" stroke-width="1.2"/>
+
+          <!-- center -->
+          <circle cx="380" cy="260" r="68" fill="#152234"/>
+          <text x="380" y="256" text-anchor="middle" font-size="14.5" font-weight="700" fill="#fff" font-family="Space Grotesk, sans-serif">AWS CLF</text>
+          <text x="380" y="274" text-anchor="middle" font-size="10" fill="#C6D2E0">4ドメイン試験</text>
+
+          <!-- domain1 top -->
+          <rect x="290" y="40" width="180" height="50" rx="10" fill="#FFF3E4" stroke="#E8890C"/>
+          <text x="380" y="60" text-anchor="middle" font-weight="700" fill="#8A4B00">① クラウドコンセプト</text>
+          <text x="380" y="76" text-anchor="middle" fill="#8A4B00" class="mono">24%</text>
+          <rect x="90" y="15" width="150" height="30" rx="8" fill="#fff" stroke="#E8890C"/><text x="165" y="34" text-anchor="middle" fill="#8A4B00">Capex → Opex</text>
+          <rect x="520" y="15" width="150" height="30" rx="8" fill="#fff" stroke="#E8890C"/><text x="595" y="34" text-anchor="middle" fill="#8A4B00">俊敏性・弾力性</text>
+
+          <!-- domain2 right -->
+          <rect x="560" y="210" width="180" height="50" rx="10" fill="#E8F8F7" stroke="#0FA3A3"/>
+          <text x="650" y="230" text-anchor="middle" font-weight="700" fill="#0B6B6B">② セキュリティ</text>
+          <text x="650" y="246" text-anchor="middle" fill="#0B6B6B" class="mono">30%</text>
+          <rect x="555" y="150" width="190" height="30" rx="8" fill="#fff" stroke="#0FA3A3"/><text x="650" y="169" text-anchor="middle" fill="#0B6B6B">責任共有モデル</text>
+          <rect x="555" y="280" width="190" height="30" rx="8" fill="#fff" stroke="#0FA3A3"/><text x="650" y="299" text-anchor="middle" fill="#0B6B6B">IAM・セキュリティ関連サービス</text>
+
+          <!-- domain3 bottom -->
+          <rect x="290" y="430" width="180" height="50" rx="10" fill="#F1EEFC" stroke="#6A5AE0"/>
+          <text x="380" y="450" text-anchor="middle" font-weight="700" fill="#4A3DAE">③ クラウド技術</text>
+          <text x="380" y="466" text-anchor="middle" fill="#4A3DAE" class="mono">34%</text>
+          <rect x="40" y="490" width="170" height="30" rx="8" fill="#fff" stroke="#6A5AE0"/><text x="125" y="509" text-anchor="middle" fill="#4A3DAE">グローバルインフラ</text>
+          <rect x="295" y="490" width="170" height="30" rx="8" fill="#fff" stroke="#6A5AE0"/><text x="380" y="509" text-anchor="middle" fill="#4A3DAE">コアサービス</text>
+          <rect x="550" y="490" width="170" height="30" rx="8" fill="#fff" stroke="#6A5AE0"/><text x="635" y="509" text-anchor="middle" fill="#4A3DAE">デプロイ方法</text>
+
+          <!-- domain4 left -->
+          <rect x="20" y="210" width="180" height="50" rx="10" fill="#EAF6EE" stroke="#2E9E5B"/>
+          <text x="110" y="230" text-anchor="middle" font-weight="700" fill="#1E6E3D">④ 請求・料金</text>
+          <text x="110" y="246" text-anchor="middle" fill="#1E6E3D" class="mono">12%</text>
+          <rect x="15" y="150" width="190" height="30" rx="8" fill="#fff" stroke="#2E9E5B"/><text x="110" y="169" text-anchor="middle" fill="#1E6E3D">料金モデル</text>
+          <rect x="15" y="280" width="190" height="30" rx="8" fill="#fff" stroke="#2E9E5B"/><text x="110" y="299" text-anchor="middle" fill="#1E6E3D">サポートプラン</text>
+        </g>
+      </svg>
+      <figcaption>図Summary: AWS CLF 4ドメインと主要トピックの全体地図</figcaption>
+    </figure>
+  </section>
+
+  <!-- ============ CHECKLIST ============ -->
+  <section id="checklist" style="margin-top:56px;">
+    <h2 class="domain-title" style="font-size:22px;">✅ 試験直前チェックリスト</h2>
+    <div class="card">
+      <h4 style="margin-top:0;color:#E8890C;">① クラウドコンセプト</h4>
+      <p style="margin:6px 0;">□ Capex/Opexの違いを説明できる &nbsp; □ 6つの価値提案を言える &nbsp; □ 可用性・弾力性・俊敏性・耐障害性・疎結合の違いを説明できる</p>
+      <h4 style="margin:18px 0 0;color:#0FA3A3;">② セキュリティ・コンプライアンス</h4>
+      <p style="margin:6px 0;">□ 責任共有モデルの分岐点を説明できる &nbsp; □ IAMユーザー/グループ/ロール/ポリシーの違いが分かる &nbsp; □ Shield・WAF・GuardDutyを区別できる</p>
+      <h4 style="margin:18px 0 0;color:#6A5AE0;">③ クラウド技術・サービス</h4>
+      <p style="margin:6px 0;">□ リージョン・AZ・エッジロケーションの関係を図で説明できる &nbsp; □ EC2とLambdaの違いを説明できる &nbsp; □ グローバルサービスとリージョナルサービスを区別できる</p>
+      <h4 style="margin:18px 0 0;color:#2E9E5B;">④ 請求・料金・サポート</h4>
+      <p style="margin:6px 0;">□ 4つの料金モデルの割引と柔軟性の関係を説明できる &nbsp; □ 4つのサポートプランの違いを説明できる &nbsp; □ Cost Explorer・Budgets・Pricing Calculatorの使い分けができる</p>
+    </div>
+    <div class="note">学習時間の配分の目安は配点比率と同じく <b>① 24% : ② 30% : ③ 34% : ④ 12%</b>。特に②と③で試験の64%が決まるため、ここを重点的に復習しましょう。</div>
+  </section>
+
+  <footer>AWS CLF (CLF-C02) 学習ガイド &middot; 各サービスの仕様・料金は変更される場合があるため、受験前に最新情報を <span class="mono">aws.amazon.com</span> で確認してください。</footer>
+
+</div>
+</body>
+</html>
